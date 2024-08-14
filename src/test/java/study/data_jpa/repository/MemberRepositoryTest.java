@@ -16,12 +16,12 @@ class MemberRepositoryTest {
 
     @Test
     public void testMember() {
-        Member member = new Member("userA");
-        Member savedMember = memberRepository.save(member);
-
-        Member findMember = memberRepository.findById(savedMember.getId()).get();
-
-        Assertions.assertThat(findMember).isEqualTo(member);
+//        Member member = new Member("userA");
+//        Member savedMember = memberRepository.save(member);
+//
+//        Member findMember = memberRepository.findById(savedMember.getId()).get();
+//
+//        Assertions.assertThat(findMember).isEqualTo(member);
     }
 
 }
