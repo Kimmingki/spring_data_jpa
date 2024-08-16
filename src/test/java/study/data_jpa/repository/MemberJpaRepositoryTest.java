@@ -10,6 +10,8 @@ import study.data_jpa.entity.Team;
 
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.*;
+
 @Transactional
 @SpringBootTest
 class MemberJpaRepositoryTest {
@@ -43,21 +45,40 @@ class MemberJpaRepositoryTest {
         // 단건 조회 검증
         Member findMember1 = memberJpaRepository.findById(member1.getId()).get();
         Member findMember2 = memberJpaRepository.findById(member2.getId()).get();
-        Assertions.assertThat(findMember1).isEqualTo(member1);
-        Assertions.assertThat(findMember2).isEqualTo(member2);
+        assertThat(findMember1).isEqualTo(member1);
+        assertThat(findMember2).isEqualTo(member2);
 
         // 전체 조회 검증
         List<Member> all = memberJpaRepository.findAll();
-        Assertions.assertThat(all).hasSize(2);
+        assertThat(all).hasSize(2);
 
         // 카운팅 검증
         long count = memberJpaRepository.count();
-        Assertions.assertThat(count).isEqualTo(2);
+        assertThat(count).isEqualTo(2);
 
         // 삭제 검증
         memberJpaRepository.delete(findMember1);
         memberJpaRepository.delete(findMember2);
         long deleteCount = memberJpaRepository.count();
-        Assertions.assertThat(deleteCount).isEqualTo(0);
+        assertThat(deleteCount).isEqualTo(0);
+    }
+
+    @Test
+    public void paging() {
+        memberJpaRepository.save(new Member("member1", 20));
+        memberJpaRepository.save(new Member("member2", 20));
+        memberJpaRepository.save(new Member("member3", 20));
+        memberJpaRepository.save(new Member("member4", 20));
+        memberJpaRepository.save(new Member("member5", 20));
+
+        int age = 20;
+        int offset = 0;
+        int limit = 3;
+
+        List<Member> members = memberJpaRepository.findByPage(age, offset, limit);
+        long totalCount = memberJpaRepository.totalCount(age);
+
+        assertThat(totalCount).isEqualTo(5);
+        assertThat(members.size()).isEqualTo(3);
     }
 }
