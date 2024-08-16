@@ -1,10 +1,10 @@
 package study.data_jpa.repository;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+import study.data_jpa.dto.MemberDTO;
 import study.data_jpa.entity.Member;
 import study.data_jpa.entity.Team;
 
@@ -75,5 +75,34 @@ class MemberRepositoryTest {
         assertThat(result.get(0).getUsername()).isEqualTo("AAA");
         assertThat(result.get(0).getAge()).isEqualTo(20);
         assertThat(result.size()).isEqualTo(1);
+    }
+
+    @Test
+    public void testQuery() {
+        Member m1 = new Member("AAA", 10);
+        Member m2 = new Member("BBB", 20);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<String> usernameList = memberRepository.findUsernameList();
+        for (String s : usernameList) {
+            System.out.println("s = " + s);
+        }
+    }
+
+    @Test
+    public void findMemberDTO() {
+        Team teamA = new Team("teamA");
+        teamRepository.save(teamA);
+
+        Member m1 = new Member("AAA", 10, teamA);
+        Member m2 = new Member("BBB", 20, teamA);
+        memberRepository.save(m1);
+        memberRepository.save(m2);
+
+        List<MemberDTO> result = memberRepository.findMemberDTO();
+        for (MemberDTO memberDTO : result) {
+            System.out.println("memberDTO.toString() = " + memberDTO.toString());
+        }
     }
 }
