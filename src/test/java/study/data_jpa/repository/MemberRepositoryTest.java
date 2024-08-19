@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 import study.data_jpa.dto.MemberDTO;
+import study.data_jpa.dto.MemberProjection;
 import study.data_jpa.entity.Member;
 import study.data_jpa.entity.Team;
 
@@ -217,5 +218,22 @@ class MemberRepositoryTest {
         for (UsernameOnly usernameOnly : result) {
             System.out.println("usernameOnly = " + usernameOnly.getUsername());
         }
+    }
+
+    @Test
+    public void nativeQuery() {
+        Team teamA = new Team("teamA");
+        em.persist(teamA);
+
+        Member m1 = new Member("member1", 20, teamA);
+        Member m2 = new Member("member2", 20, teamA);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+        Page<MemberProjection> result = memberRepository.findByNativeProjection(PageRequest.of(0, 10));
+        System.out.println("result = " + result);
     }
 }
