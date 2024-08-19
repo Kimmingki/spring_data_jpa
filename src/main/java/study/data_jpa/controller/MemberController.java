@@ -35,10 +35,10 @@ public class MemberController {
         return page.map(m -> new MemberDTO(m.getId(), m.getUsername()));
     }
 
-    @PostConstruct
-    private void init() {
-        for (int i=0; i<50; i++) {
-            memberRepository.save(new Member("member" + i, i));
-        }
-    }
+//    @PostConstruct
+//    private void init() {
+//        for (int i=0; i<50; i++) {
+//            memberRepository.save(new Member("member" + i, i));
+//        }
+//    }
 }
