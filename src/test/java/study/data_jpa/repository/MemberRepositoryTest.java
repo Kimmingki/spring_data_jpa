@@ -199,4 +199,23 @@ class MemberRepositoryTest {
     public void callCustom() {
         List<Member> memberCustom = memberRepository.findMemberCustom();
     }
+
+    @Test
+    public void projections() {
+        Team teamA = new Team("teamA");
+        em.persist(teamA);
+
+        Member m1 = new Member("member1", 20, teamA);
+        Member m2 = new Member("member2", 20, teamA);
+        em.persist(m1);
+        em.persist(m2);
+
+        em.flush();
+        em.clear();
+
+        List<UsernameOnly> result = memberRepository.findProjectionByUsername("member1");
+        for (UsernameOnly usernameOnly : result) {
+            System.out.println("usernameOnly = " + usernameOnly.getUsername());
+        }
+    }
 }
